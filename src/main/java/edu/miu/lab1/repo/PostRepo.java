@@ -1,20 +1,16 @@
 package edu.miu.lab1.repo;
 
 import edu.miu.lab1.entity.Post;
+import edu.miu.lab1.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface PostRepo {
+public interface PostRepo extends JpaRepository<Post, Long> {
 
-    public List<Post> findAll();
+    List<Post> findByAuthorContaining(String author);
+    List<Post> findByAuthor(String author);
 
-    public Post getById(int id);
+    List<Post> findByUser(User user);
 
-    public void save(Post p);
-
-    public void delete(int id);
-
-    public void update(int id, Post p);
-
-    public List<Post> findPostByAuthor(String author, int exact);
 }

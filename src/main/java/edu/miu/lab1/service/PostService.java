@@ -1,20 +1,20 @@
 package edu.miu.lab1.service;
 
+import edu.miu.lab1.entity.Post;
 import edu.miu.lab1.entity.dto.PostDto;
 
 import java.util.List;
 
 public interface PostService {
 
-    public List<PostDto> findAll();
+    List<PostDto> findAll();
 
-    PostDto getById(int id);
+    void update(long id, PostDto p);
 
     void save(PostDto p);
 
-    void delete(int id);
+    void delete(long id);
 
-    void update(int id, PostDto p);
-
+    PostDto getById(long id);
     public List<PostDto> findPostByAuthor(String author, int exact);
 }
