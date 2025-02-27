@@ -98,6 +98,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostDto> findPostByTitle(String title, int exact) {
+        List<Post> posts;
+
+        if (exact == 1) {
+            posts = postRepo.findByTitle(title);
+        } else {
+            posts = postRepo.findByTitleContaining(title);
+        }
+
+        return posts.stream()
+                .map(post -> modelMapper.map(post, PostDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<PostDto> getByUser(User user) {
         List<Post> posts = postRepo.findByUser(user);
         return posts.stream()

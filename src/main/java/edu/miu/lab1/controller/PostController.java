@@ -1,6 +1,8 @@
 package edu.miu.lab1.controller;
 
+import edu.miu.lab1.entity.dto.CommentDto;
 import edu.miu.lab1.entity.dto.PostDto;
+import edu.miu.lab1.service.CommentService;
 import edu.miu.lab1.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -18,11 +20,13 @@ import java.util.concurrent.TimeUnit;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
 
     @Autowired
-    public PostController(PostService postService) {
+    public PostController(PostService postService, CommentService commentService) {
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -79,5 +83,22 @@ public class PostController {
         return author==null?
                 postService.findAll():
                 postService.findPostByAuthor(author, exact);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/title/filter")
+    public List<PostDto> getPostsByTitle(@RequestParam(value = "q" ,required = false) String title, @RequestParam(value = "exact" ,required = false) int exact) {
+        return title==null?
+                postService.findAll():
+                postService.findPostByTitle(title, exact);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("{postId}/comments")
+    public void saveComment(
+            @PathVariable long postId,
+            @RequestBody CommentDto commentDto
+    ) {
+        commentService.save(postId, commentDto);
     }
 }

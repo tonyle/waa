@@ -17,7 +17,9 @@ public interface PostService {
     void delete(long id);
 
     PostDto getById(long id);
-    public List<PostDto> findPostByAuthor(String author, int exact);
+    List<PostDto> findPostByAuthor(String author, int exact);
+
+    List<PostDto> findPostByTitle(String title, int exact);
 
     List<PostDto> getByUser(User user);
 }

@@ -1,7 +1,11 @@
 package edu.miu.lab1.service.impl;
 
+import edu.miu.lab1.entity.Comment;
+import edu.miu.lab1.entity.Post;
 import edu.miu.lab1.entity.User;
 import edu.miu.lab1.entity.dto.UserDto;
+import edu.miu.lab1.repo.CommentRepo;
+import edu.miu.lab1.repo.PostRepo;
 import edu.miu.lab1.repo.UserRepo;
 import edu.miu.lab1.service.UserService;
 import jakarta.persistence.EntityManager;
@@ -29,6 +33,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private final UserRepo userRepo;
+    @Autowired
+    private PostRepo postRepo;
+    @Autowired
+    private CommentRepo commentRepo;
 
     @Override
     public List<User> findAll() {
@@ -63,4 +71,28 @@ public class UserServiceImpl implements UserService {
     public List<User> getWithMultiplePosts() {
         return userRepo.findUsersWithMultiplePosts();
     }
+
+    @Override
+    public List<User> getUsersWithMoreThanNPosts(int postCount) {
+        return userRepo.findUsersWithMoreThanNPosts(postCount);
+    }
+
+    @Override
+    public List<User> getUsersByPostTitle(String title) {
+        return userRepo.findUsersByPostTitle(title);
+    }
+
+    @Override
+    public Comment getCommentByUserPostAndCommentId(Long userId, Long postId, Long commentId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Post post = postRepo.findByIdAndUserId(postId, user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        return commentRepo.findByIdAndPostId(commentId, post.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Comment with ID " + commentId + " not found for post " + postId));
+    }
+
+
 }
