@@ -17,4 +17,6 @@ public interface UserService {
     void deleteById(long id);
 
     void save(UserDto p);
+
+    List<User> getWithMultiplePosts();
 }

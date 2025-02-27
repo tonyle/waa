@@ -7,6 +7,7 @@ import edu.miu.lab1.entity.dto.PostDto;
 import edu.miu.lab1.entity.dto.UserDto;
 import edu.miu.lab1.repo.PostRepo;
 import edu.miu.lab1.repo.UserRepo;
+import edu.miu.lab1.service.PostService;
 import edu.miu.lab1.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepo userRepo;
     private final PostRepo postRepo;
+    private final PostService postService;
 
     @GetMapping
     public List<User> getUsers(){
@@ -47,19 +49,13 @@ public class UserController {
 
     @GetMapping("/{id}/posts")
     public List<PostDto> getPostsByUserId(@PathVariable long id) {
-        User user = userRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        List<Post> posts = postRepo.findByUser(user);
-
-        return posts.stream()
-                .map(PostDto::new)
-                .collect(Collectors.toList());
+        User user = userService.findById(id).orElseThrow(EntityNotFoundException::new);
+        return postService.getByUser(user);
     }
 
     @GetMapping("/multiple-posts")
     public List<User> getUsersWithMultiplePosts() {
-        return userRepo.findUsersWithMultiplePosts();
+        return userService.getWithMultiplePosts();
     }
 
 }

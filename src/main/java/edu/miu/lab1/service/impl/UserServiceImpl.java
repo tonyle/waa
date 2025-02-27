@@ -5,6 +5,7 @@ import edu.miu.lab1.entity.dto.UserDto;
 import edu.miu.lab1.repo.UserRepo;
 import edu.miu.lab1.service.UserService;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -58,4 +59,8 @@ public class UserServiceImpl implements UserService {
         return userRepo.findById(id);
     }
 
+    @Override
+    public List<User> getWithMultiplePosts() {
+        return userRepo.findUsersWithMultiplePosts();
+    }
 }
