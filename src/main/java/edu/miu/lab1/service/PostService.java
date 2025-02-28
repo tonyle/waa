@@ -10,7 +10,7 @@ public interface PostService {
 
     List<PostDto> findAll();
 
-    void update(long id, PostDto p);
+    void update(long id, PostDto p) throws RuntimeException;
 
     void save(PostDto p);
 

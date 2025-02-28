@@ -1,5 +1,6 @@
 package edu.miu.lab1.service.impl;
 
+import edu.miu.lab1.aop.ExecutionTime;
 import edu.miu.lab1.entity.Comment;
 import edu.miu.lab1.entity.Post;
 import edu.miu.lab1.entity.User;
@@ -63,6 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @ExecutionTime
     public Optional<User> findById(long id) {
         return userRepo.findById(id);
     }

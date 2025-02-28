@@ -43,20 +43,20 @@ public class PostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<PostDto>> getById(@PathVariable("id") int id) {
-        var product = postService.getById(id);
-        if (product == null) {
+        var post = postService.getById(id);
+        if (post == null) {
             return ResponseEntity.notFound().build();
         }
 
-        EntityModel<PostDto> resource = EntityModel.of(product);
+        EntityModel<PostDto> resource = EntityModel.of(post);
 
         // Self-link
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getById(id))
                 .withSelfRel());
 
-        // Add all products
+        // Add all posts
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PostController.class).getAll())
-                .withRel("all-products"));
+                .withRel("all-posts"));
 
         CacheControl cacheControl = CacheControl.maxAge(1, TimeUnit.DAYS)
                 .cachePublic(); // Use cachePrivate() if it should only be cached by browser, not proxies
@@ -73,8 +73,8 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable("id") int productId, @RequestBody PostDto p) {
-        postService.update(productId,p);
+    public void update(@PathVariable("id") int postId, @RequestBody PostDto p) {
+        postService.update(postId,p);
     }
 
     @ResponseStatus(HttpStatus.OK)
