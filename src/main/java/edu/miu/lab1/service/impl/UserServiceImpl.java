@@ -3,10 +3,13 @@ package edu.miu.lab1.service.impl;
 import edu.miu.lab1.aop.ExecutionTime;
 import edu.miu.lab1.entity.Comment;
 import edu.miu.lab1.entity.Post;
+import edu.miu.lab1.entity.Role;
 import edu.miu.lab1.entity.User;
 import edu.miu.lab1.entity.dto.UserDto;
+import edu.miu.lab1.entity.dto.UserResponseDto;
 import edu.miu.lab1.repo.CommentRepo;
 import edu.miu.lab1.repo.PostRepo;
+import edu.miu.lab1.repo.RoleRepo;
 import edu.miu.lab1.repo.UserRepo;
 import edu.miu.lab1.service.UserService;
 import jakarta.persistence.EntityManager;
@@ -16,6 +19,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +33,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PersistenceContext
     EntityManager entityManager;
 
@@ -38,6 +45,8 @@ public class UserServiceImpl implements UserService {
     private PostRepo postRepo;
     @Autowired
     private CommentRepo commentRepo;
+    @Autowired
+    private final RoleRepo roleRepo;
 
     @Override
     public List<User> findAll() {
@@ -45,9 +54,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findByIdDto(long id){
-
-        return modelMapper.map(userRepo.findById(id), UserDto.class);
+    public UserResponseDto findByIdDto(long id){
+        return modelMapper.map(userRepo.findById(id), UserResponseDto.class);
     }
 
     @Override
@@ -60,6 +68,10 @@ public class UserServiceImpl implements UserService {
         User u = new User();
         u.setName(dto.getName());
         u.setPosts(dto.getPosts());
+        u.setEmail(dto.getEmail());
+        u.setPassword(passwordEncoder.encode(dto.getPassword()));
+        List<Role> roles = roleRepo.findAllById(dto.getRoleIds());
+        u.setRoles(roles);
         userRepo.save(u);
     }
 

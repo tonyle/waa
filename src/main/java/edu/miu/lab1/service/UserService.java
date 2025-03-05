@@ -3,6 +3,7 @@ package edu.miu.lab1.service;
 import edu.miu.lab1.entity.Comment;
 import edu.miu.lab1.entity.User;
 import edu.miu.lab1.entity.dto.UserDto;
+import edu.miu.lab1.entity.dto.UserResponseDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,7 @@ public interface UserService {
 
     Optional<User> findById(long id);
 
-    UserDto findByIdDto(long id);
+    UserResponseDto findByIdDto(long id);
 
     void deleteById(long id);
 

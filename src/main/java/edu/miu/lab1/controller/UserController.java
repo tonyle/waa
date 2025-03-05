@@ -4,11 +4,14 @@ import edu.miu.lab1.entity.Comment;
 import edu.miu.lab1.entity.User;
 import edu.miu.lab1.entity.dto.PostDto;
 import edu.miu.lab1.entity.dto.UserDto;
+import edu.miu.lab1.entity.dto.UserResponseDto;
 import edu.miu.lab1.service.CommentService;
 import edu.miu.lab1.service.PostService;
 import edu.miu.lab1.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +26,8 @@ public class UserController {
     private final UserService userService;
     private final PostService postService;
     private final CommentService commentService;
+    @Autowired
+    ModelMapper modelMapper;
 
     @GetMapping
     public List<User> getUsers(){
@@ -32,6 +37,7 @@ public class UserController {
     @GetMapping("/{id}")
     public Optional<User> getUser(@PathVariable("id") int id){
         return userService.findById(id);
+//        return  modelMapper.map(userService.findById(id), UserResponseDto.class);
     }
 
     @DeleteMapping("/{id}")

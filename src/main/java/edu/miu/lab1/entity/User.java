@@ -22,10 +22,16 @@ public class User {
     private long id;
 
     private String name;
+    private String email;
+    private String password;
 
     @JsonManagedReference
     @JoinColumn(name = "user_id")
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Fetch(FetchMode.SELECT)
     private List<Post> posts;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable
+    private List<Role> roles;
 }

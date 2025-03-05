@@ -13,6 +13,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     List<User> findAll();
 
+    User findByEmail(String email);
+
     @Query("SELECT u FROM User u WHERE SIZE(u.posts) > 1")
     List<User> findUsersWithMultiplePosts();
 
